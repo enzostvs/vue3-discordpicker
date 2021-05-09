@@ -1,26 +1,29 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <div style="height: 90vh; display: flex; align-items: flex-end; justify-content: center; box-sizing: border-box; padding: 40px;">
+      <emoji-picker @change="setEmoji" input :value="value" @update:value="value = $event" />
+    </div>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import EmojiPicker from '@/components/EmojiPicker.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    EmojiPicker
+  },
+  data () {
+    return {
+      value: ''
+    }
+  },
+  methods: {
+    setEmoji (emoji) {
+      console.log(emoji)
+    }
   }
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

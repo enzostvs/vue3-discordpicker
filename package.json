@@ -1,14 +1,18 @@
 {
-  "name": "discord-picker",
-  "version": "0.1.0",
-  "private": true,
+  "name": "vue3-emojipicker-discord",
+  "version": "0.1.4",
+  "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build-bundle": "vue-cli-service build --target lib --name discord-emojipicker ./src/components/EmojiPicker.vue",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "autoprefixer": "^9.8.6",
     "core-js": "^3.6.5",
+    "postcss": "^7.0.35",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2",
     "vue": "^3.0.0"
   },
   "devDependencies": {
@@ -18,8 +22,19 @@
     "@vue/compiler-sfc": "^3.0.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0"
+    "eslint-plugin-vue": "^7.0.0",
+    "node-sass": "^6.0.0",
+    "sass": "^1.32.12",
+    "sass-loader": "^10"
   },
+  "main": "./dist/discord-emojipicker.common.js",
+  "files": [
+    "dist/*",
+    "src/*",
+    "public/*",
+    "*.json",
+    "*.js"
+  ],
   "eslintConfig": {
     "root": true,
     "env": {
