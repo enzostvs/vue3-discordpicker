@@ -82,7 +82,7 @@ export default defineComponent({
 
 <template>
   <div style="width: 100%">
-    <!-- <div v-click-outside="onClose" :class="{ 'opacity-0 pointer-events-none': !autocomplete.show }" class="vue3-discord-emojipicker__autocomplete w-full absolute transform -translate-y-full left-0 -top-4 transition duration-200">
+    <div v-click-outside="onClose" :class="{ 'opacity-0 pointer-events-none': !autocomplete.show }" class="vue3-discord-emojipicker__autocomplete w-full absolute transform -translate-y-full left-0 -top-4 transition duration-200">
       <div class="w-full bg-grey-400 py-3 rounded-xl shadow-xl">
         <p class="text-grey-100 font-semibold uppercase text-sm px-5 mb-3">{{ autocomplete.results.length }} results</p>
         <ul class="px-3">
@@ -94,7 +94,7 @@ export default defineComponent({
           </li>
         </ul>
       </div> 
-    </div> -->
+    </div>
     <input ref="input" v-model="content" type="text" class="vue3-discord-emojipicker__input" :placeholder="placeholder" @input="onComplete">
   </div>
 </template>

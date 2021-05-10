@@ -11,7 +11,6 @@
   "dependencies": {
     "autoprefixer": "^9.8.6",
     "core-js": "^3.6.5",
-    "postcss": "^7.0.35",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2",
     "vue": "^3.0.0"
   },
@@ -25,7 +24,14 @@
     "eslint-plugin-vue": "^7.0.0",
     "node-sass": "^6.0.0",
     "sass": "^1.32.12",
-    "sass-loader": "^10"
+    "sass-loader": "^10",
+    "postcss": "^7.0.35",
+    "postcss-preset-env": "^6.7.0",
+    "postcss-loader": "^4.1.0",
+    "postcss-modules": "3.0.0",
+    "postcss-import": "^12.0.1",
+    "postcss-nested": "^4.1.2",
+    "@fullhuman/postcss-purgecss": "^1.2.0"
   },
   "main": "./dist/discord-emojipicker.common.js",
   "files": [

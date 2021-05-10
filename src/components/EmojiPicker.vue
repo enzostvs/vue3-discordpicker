@@ -1,5 +1,6 @@
 <template>
   <div class="vue3-emojipicker">
+    <div class="p-5 bg-grey-400" />
     <div :class="{ 'full': input }" class="vue3-emojipicker__app">
       <div
         :class="{ 'not-opened': !opened }"
@@ -226,18 +227,22 @@ export default defineComponent({
 </script>
 
 
-<style lang="scss">
-$grey-100: #B9BBBE;
+<style>
+/* $grey-100: #B9BBBE;
 $grey-200: #71777D;
 $grey-300: #4F545C;
 $grey-400: #2F3136;
 $grey-500: #292B2F;
 $grey-600: #212224;
-$grey-700: #292B2F;
+$grey-700: #292B2F; */
 * {
   box-sizing: border-box;
 }
-.vue3-emojipicker {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* .vue3-emojipicker {
   width: 100%;
   font-family: 'Sans serif';
   .vue3-emojipicker__app {
@@ -330,7 +335,7 @@ $grey-700: #292B2F;
       }
     }
   }
-}
+} */
 /* .vue3-discord-emojipicker {
   height: 454px;
   width: 444px;
