@@ -15,5 +15,5 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="vue3-discord-emojipicker__emoji" @mouseleave="newEmoji" @click="$emit('click')" />
+  <div class="vue3-discord-emojipicker__trigger filter grayscale hover:filter-none transform transition duration-200 cursor-pointer hover:scale-110" @mouseleave="newEmoji" @click="$emit('click')" />
 </template>

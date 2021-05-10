@@ -1,7 +1,8 @@
 export default {
   beforeMount (el, binding) {
     el.clickOutsideEvent = function(event) {
-      if (event.target.classList.contains('vue3-discord-emojipicker__trigger') || event.target.classList.contains('vue3-discord-emojipicker__autocomplete') || event.target.classList.contains('vue3-discord-emojipicker__input')) {
+      const classes= ['vue3-discord-emojipicker__pickvariation', 'vue3-discord-emojipicker__trigger', 'vue3-discord-emojipicker__autocomplete', 'vue3-discord-emojipicker__input']
+      if (classes.find(classe => event.target.classList.contains(classe))) {
         return
       }
       if (!(el === event.target || el.contains(event.target))) {

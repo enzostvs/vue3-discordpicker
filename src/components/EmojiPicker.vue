@@ -1,20 +1,19 @@
 <template>
-  <div class="vue3-emojipicker">
-    <div class="p-5 bg-grey-400" />
-    <div :class="{ 'full': input }" class="vue3-emojipicker__app">
+  <div class="vue3-emojipicker" style="width: 100%;">
+    <div :class="`relative ${input ? 'w-full' : 'max-w-max'} font-sans`">
       <div
-        :class="{ 'not-opened': !opened }"
-        class="vue3-discord-emojipicker"
+        :class="{ 'opacity-0 pointer-events-none': !opened }"
+        class="vue3-discord-emojipicker rounded-xl shadow-lg overflow-hidden mx-auto absolute transition duration-200 -top-4 right-0 transform -translate-y-full"
         v-click-outside="close"
       >
-        <header class="vue3-discord-emojipicker__header">
-          <p class="vue3-discord-emojipicker__header-tag">Émoji</p>
+        <header class="bg-grey-400 px-5 py-5 shadow-lg relative z-1">
+          <p class="font-bold text-white text-sm bg-grey-300 py-1 px-2 rounded-md w-max mb-2 hidden md:block">Émoji</p>
           <div class="flex items-center justify-between w-full">
             <div class="flex items-center justify-between w-full bg-grey-600 rounded-md overflow-hidden pr-4">
               <input v-model="search" class="bg-grey-600 w-full text-sm py-2 px-3 text-white outline-none" :placeholder="selected && selected.name ? `:${selected.name.replace(/\s/g, '')}:`: placeholder" />
               <img src="https://en-zo.dev/vue-discord-emojipicker/search.svg" class="w-4" />
             </div>
-            <div class="py-1.5 px-2 ml-2 relative z-1" @mouseenter="hovered = true" @mouseleave="hovered = false">
+            <div class="py-2 px-2 ml-2 relative z-1" @mouseenter="hovered = true" @mouseleave="hovered = false">
               <img :src="`https://en-zo.dev/vue-discord-emojipicker/variations/variation_${variation}.svg`" class="w-6 relative z-1" />
               <div :class="`bg-white border border-grey-600 bg-grey-500 rounded-lg absolute shadow-md -top-1 left-0 w-full -z-1 pt-10 text-center transform ${hovered ? '' : 'pointer-events-none -translate-y-3 opacity-0'} transition duration-300`">
                 <template v-for="emj in 5">
@@ -22,7 +21,7 @@
                     v-if="variation !== emj - 1"
                     :key="emj"
                     :src="`https://en-zo.dev/vue-discord-emojipicker/variations/variation_${emj - 1}.svg`"
-                    class="w-full px-2 py-1.5 transition duration-200 hover:bg-grey-400 cursor-pointer"
+                    class="w-full px-2 py-2 transition duration-200 hover:bg-grey-400 cursor-pointer vue3-discord-emojipicker__pickvariation"
                     @click="setVariation(emj - 1)"
                   />
                 </template>
@@ -43,34 +42,37 @@
           </div>
           <div class="bg-grey-400 h-full w-full flex flex-col">
             <div id="vue3-discord_emojipicker" class="overflow-auto relative pb-4 h-full w-full">
-              <template v-for="(category, c) in categories">
-                <div
-                  v-if="$data[category] && $data[category].length > 0"
-                  :key="`category_${c}`"
-                  :class="{ 'mt-2': c > 0 }"
-                  class="vue3-discord_emojipicker__observer"
-                >
-                  <div class="uppercase px-4 py-2 bg-grey-400 text-xs text-grey-100 font-semibold sticky top-0">
-                    {{ category }}
-                  </div>
-                  <div class="px-4 flex flex-items center justify-start flex-wrap">
-                    <div
-                      v-for="(emoji, e) in $data[category]"
-                      :key="`emoji_${e}`"
-                      class="text-2xl cursor-pointer p-1 transition duration-200 hover:bg-grey-300 hover:bg-opacity-50 rounded-md w-8 h-8 flex items-center justify-center"
-                      @mouseenter="selected = { ...emoji }"
-                      @click="send(emoji, true)"
-                    >
-                      <template v-if="emoji.variations && variation > 0">
-                        {{ emoji.variations[variation] }}
-                      </template>
-                      <template v-else>
-                        {{ emoji.emoji }}
-                      </template>
+              <template v-if="categories.length > 0">
+                <template v-for="(category, c) in categories">
+                  <div
+                    v-if="$data[category] && $data[category].length > 0"
+                    :key="`category_${c}`"
+                    :class="{ 'mt-2': c > 0 }"
+                    class="vue3-discord_emojipicker__observer"
+                  >
+                    <div class="uppercase px-4 py-2 bg-grey-400 text-xs text-grey-100 font-semibold sticky top-0">
+                      {{ category }}
+                    </div>
+                    <div class="px-4 flex flex-items center justify-start flex-wrap">
+                      <div
+                        v-for="(emoji, e) in $data[category]"
+                        :key="`emoji_${e}`"
+                        class="text-2xl cursor-pointer p-1 transition duration-200 hover:bg-grey-300 hover:bg-opacity-50 rounded-md w-8 h-8 flex items-center justify-center"
+                        @mouseenter="selected = { ...emoji }"
+                        @click="send(emoji, true)"
+                      >
+                        <template v-if="emoji.variations && variation > 0">
+                          {{ emoji.variations[variation] }}
+                        </template>
+                        <template v-else>
+                          {{ emoji.emoji }}
+                        </template>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </template>
               </template>
+              <p class="text-grey-100 text-center py-4">No results found :-(</p>
             </div>
             <div v-if="selected" class="bg-grey-700 w-full px-5 py-2 border-t border-grey-600 items-center justify-start hidden md:flex">
               <p class="text-3xl">{{ selected.emoji}}</p>
@@ -81,7 +83,7 @@
           </div>
         </div>
       </div>
-      <div :class="{ 'active': input }" id="vue3-discord-emojipicker__input">
+      <div :class="{ 'bg-grey-400 rounded-xl justify-between pr-4 flex items-center': input }" class="mt-4 bg-white">
         <Autocomplete v-if="input" :value="value" :placeholder="inputPlaceholder" :opened-picker="opened" :emojis="emojis.list" @change="e => $emit('update:value', e)" @send="send" @close="close" />
         <Emoji @click="opened = !opened" />
       </div>
@@ -228,115 +230,7 @@ export default defineComponent({
 
 
 <style>
-/* $grey-100: #B9BBBE;
-$grey-200: #71777D;
-$grey-300: #4F545C;
-$grey-400: #2F3136;
-$grey-500: #292B2F;
-$grey-600: #212224;
-$grey-700: #292B2F; */
-* {
-  box-sizing: border-box;
-}
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* .vue3-emojipicker {
-  width: 100%;
-  font-family: 'Sans serif';
-  .vue3-emojipicker__app {
-    width: 100%;
-    position: relative;
-    &.full {
-      width: 100%;
-      max-width: 100%;
-    }
-    max-width: max-content;
-    .vue3-discord-emojipicker {
-      height: 454px;
-      width: 444px;
-      border-radius: 8px;
-      box-shadow: rgba(4, 4, 5, 0.15) 0px 0px 0px 1px, rgba(0, 0, 0, 0.24) 0px 8px 16px 0px;
-      overflow: hidden;
-      margin: auto;
-      position: absolute;
-      transition-duration: .2s;
-      top: -1rem;
-      right: 0;
-      transform: translateY(-100%);
-      &.not-opened {
-        pointer-events: none;
-        opacity: 0;
-      }
-      .vue3-discord-emojipicker__header {
-        background-color: $grey-400;
-        padding: 1.25rem;
-        box-shadow: rgba(4, 4, 5, 0.2) 0px 1px 0px 0px, rgba(6, 6, 7, 0.05) 0px 1.5px 0px 0px, rgba(4, 4, 5, 0.05) 0px 2px 0px 0px;
-        position: relative;
-        .vue3-discord-emojipicker__header-tag {
-          font-family: bold;
-          color: white;
-          font-size: 0.875rem;
-          line-height: 1.25rem;
-          background: $grey-300;
-          border-radius: 0.125rem;
-          width: max-content;
-          padding: 0.25rem .5rem;
-        }
-      }
-    }
-    @media (max-width: 768px) {
-      .vue3-discord-emojipicker {
-        width: 300px;
-        height: 400px;
-      }
-    }
-  }
-  #vue3-discord-emojipicker__input {
-    &.active {
-      background: $grey-400;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-right: 1rem;
-      border-radius: 0.75rem;
-    }
-    width: 100%;
-    margin-top: 1rem;
-    background-color: white;
-    .vue3-discord-emojipicker__input {
-      width: 100%;
-      background: transparent;
-      padding: 0.75rem 1.25rem;
-      color: white;
-      border: none;
-      outline: none;
-      font-size: 1rem;
-      line-height: 1.5rem;
-      ::placeholder {
-        color: $grey-200;
-      }
-    }
-    .vue3-discord-emojipicker__emoji {
-      // filter grayscale hover:filter-none transform transition duration-200 cursor-pointer hover:scale-110
-      background-image: url('https://en-zo.dev/vue-discord-emojipicker/sprite_emojis.png');
-      background-position: -22px 0;
-      background-size: 242px 88px;
-      background-repeat: no-repeat;
-      width: 22.5px;
-      height: 22px;
-      display: block;
-      cursor: pointer;
-      filter: grayscale(100);
-      &:hover {
-        transform: scale(1.1);
-        filter: none;
-      }
-    }
-  }
-} */
-/* .vue3-discord-emojipicker {
+.vue3-discord-emojipicker {
   height: 454px;
   width: 444px;
 }
@@ -371,6 +265,9 @@ $grey-700: #292B2F; */
   border-radius: 100px;
   background: #212224;
 }
+#vue3-discord_emojipicker {
+  scroll-behavior: smooth;
+}
 .vue3-discord-emojipicker__trigger {
   background-image: url('https://en-zo.dev/vue-discord-emojipicker/sprite_emojis.png');
   background-position: -22px 0;
@@ -380,9 +277,6 @@ $grey-700: #292B2F; */
   height: 22px;
   display: block;
 }
-#vue3-discord_emojipicker {
-  scroll-behavior: smooth;
-} */
 
 .-z-1 {
   z-index: -1;
