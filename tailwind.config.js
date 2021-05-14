@@ -15,7 +15,8 @@ module.exports = {
         500: '#292B2F',
         600: '#212224',
         700: '#292B2F'
-      }
+      },
+      blue: '#5865f2'
     },
     extend: {
     },
@@ -23,6 +24,7 @@ module.exports = {
   variants: {
     extend: {
       filter: ['hover', 'focus'],
+      brightness: ['hover', 'focus']
     },
   },
   plugins: [],
