@@ -1,11 +1,11 @@
 {
-  "name": "vue3-emojipicker-discord",
-  "version": "0.1.4",
+  "name": "vue3-discordpicker",
+  "version": "1.0.3",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "build-bundle": "vue-cli-service build --target lib --name discord-emojipicker ./src/components/DiscordPicker.vue",
+    "build-bundle": "vue-cli-service build --target lib --name discordpicker ./src/components/DiscordPicker.vue",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -33,7 +33,7 @@
     "postcss-nested": "^4.1.2",
     "@fullhuman/postcss-purgecss": "^1.2.0"
   },
-  "main": "./dist/discord-emojipicker.common.js",
+  "main": "./dist/discordpicker.common.js",
   "files": [
     "dist/*",
     "src/*",

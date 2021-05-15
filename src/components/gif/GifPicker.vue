@@ -17,6 +17,7 @@
               :key="r"
               class="h-28 rounded-lg bg-cover text-white flex items-center justify-center relative font-semibold font-xl border-2 border-transparent hover:border-blue transition duration-300 cursor-pointer group z-1 overflow-hidden"
               :style="`background-image: url(${renderSmallGif(result.media[0])})`"
+              @click="$emit('send', { url: renderHugeGif(result.media[0]), send: true, type: 'gif' })"
             />
           </div>
           <div v-else-if="tags && tags.length" class="grid grid-cols-2 grid-flow-row auto-rows-auto	gap-4">
@@ -67,6 +68,9 @@ export default {
     },
     renderSmallGif ({ tinygif }) {
       return tinygif.url
+    },
+    renderHugeGif ({ mediumgif }) {
+      return mediumgif.url
     },
     get (query, key) {
       fetch(`https://g.tenor.com/v1/${query}&key=${this.apiKey}`)

@@ -1,24 +1,50 @@
-# discord-picker
+# vue3-discord-picker
+____
 
-## Project setup
-```
-npm install
+![VueJS](https://img.shields.io/badge/vuejs-%2335495e.svg?&style=for-the-badge&logo=vue.js&logoColor=%234FC08D)  ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?&style=for-the-badge&logo=tailwind-css&logoColor=white)
+
+[![NPM](https://nodei.co/npm/vue3-player-video.png)](https://nodei.co/npm/vue3-player-video/)
+
+A new emoji / gif picker for your app !
+Based on discord.
+
+This components is available only in vue3.
+
+### Exemple
+- [Live demo 🎉](https://en-zo.dev/vue3-discordpicker) (coming soon !)
+- [Code demo 🎈](https://github.com/enzostvs/vue3-discordpicker/tree/main/examples) (coming soon !)
+
+### Install
+```js
+npm install vue3-discordpicker
 ```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
+### Global
+```js
+import Vue from 'vue'
+import EmojiPicker from 'vue3-discordpicker'
+
+Vue.use(EmojiPicker, /* { default options with global component } */)
 ```
 
-### Compiles and minifies for production
-```
-npm run build
+### Local registration
+```js
+import EmojiPicker from 'vue3-discordpicker'
+
+export default {
+  components: {
+    EmojiPicker
+  }
+}
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
+____
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Props
+| Name   |      Type      |  Default | Description |
+|----------|:-------------:|:------:|------:|
+| input |    `Boolean`   |   false |  Load input w/ autocomplete |
+| value | `String`, `Number` |  null | v-model to input value |
+| categories | `Array` |   true | Display the mask on first load |
+| gifFormat | `String` |  | Return gif link with markdown format or html format (default: nothing) |
+| key | `String` |  | API_KEY tenor.com (free, register here: https://tenor.com/gifapi) |

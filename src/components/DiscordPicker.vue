@@ -1,5 +1,5 @@
 <template>
-  <div class="vue3-emojipicker" style="width: 100%;">
+  <div class="vue3-emojipicker" :style="input ? 'width: 100%;' : 'max-width: max-content'">
     <div :class="`relative ${input ? 'w-full' : 'max-w-max'} font-sans`">
       <div
         :class="{ 'opacity-0 pointer-events-none': !opened }"
@@ -22,10 +22,10 @@
             Émoji
           </p>
         </header>
-        <gif-picker v-if="active === 'gif'" :api-key="key" />
+        <gif-picker v-if="active === 'gif'" :api-key="key" @send="({ url, send, type}) => this.send(url, send, type)" />
         <emoji-picker v-if="active === 'emoji'" :categories="categories" :emojis="emojis" @send="({ emoji, send }) => this.send(emoji, send)" />
       </div>
-      <div :class="{ 'bg-grey-400 rounded-xl justify-between pr-4 flex items-center': input }" class="mt-4 bg-white">
+      <div :class="{ 'bg-grey-400 rounded-xl justify-between pr-4 flex items-center emojibutton__active': input }" class="mt-4">
         <Autocomplete v-if="input" :value="value" :placeholder="placeholder" :opened-picker="opened" :emojis="emojis.list" @change="e => $emit('update:value', e)" @send="send" @close="close" />
         <div class="flex items-center justify-center">
           <gif-button @click="open" />
@@ -52,7 +52,7 @@ export default defineComponent({
   directives: {
     clickOutside,
   },
-  emits: ['update:value', 'change'],
+  emits: ['update:value', 'emoji', 'gif'],
   props: {
     categories: {
       type: Array,
@@ -71,14 +71,19 @@ export default defineComponent({
     value: {
       type: [String, Number],
       default: null,
+    },
+    gifFormat: {
+      type: String
+    },
+    key: {
+      type: String
     }
   },
   data () {
     return {
       opened: false,
       emojis,
-      active: 'gif',
-      key: 'BEASSSWYZQI2'
+      active: 'gif'
     }
   },
   methods: {
@@ -87,13 +92,28 @@ export default defineComponent({
         this.opened = false
       }
     },
-    send (value, send = false) {
-      const emoji = (value.variations && this.variation > 0) ? value.variations[this.variation] : value.emoji
-      this.$emit('change', emoji)
-      if (this.input && send) {
-        this.$emit('update:value', `${this.value} ${emoji}`)
+    send (value, send = false, type = 'emoji') {
+      if (type === 'gif') {
+        value = this.formatGif(value)
+        this.$emit('gif', value)
+      }
+      if (type === 'emoji') {
+        value = (value.variations && this.variation > 0) ? value.variations[this.variation] : value.emoji
+        this.$emit('emoji', value)
+        if (this.input && send) {
+          this.$emit('update:value', `${this.value} ${value}`)
+        }
       }
       this.opened = false
+    },
+    formatGif (url) {
+      if (this.gifFormat === 'md') {
+        url = `!(alt)[${url}]`
+      }
+      if (this.gifFormat === 'html') {
+        url = `<img src="${url}" />`
+      }
+      return url
     },
     open (item = 'emoji') {
       this.active = item
@@ -105,6 +125,10 @@ export default defineComponent({
 
 
 <style>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .vue3-discord-emojipicker {
   height: 454px;
   width: 444px;
@@ -142,6 +166,9 @@ export default defineComponent({
 }
 #vue3-discordpicker {
   scroll-behavior: smooth;
+}
+.emojibutton__active .vue3-discord-emojipicker__emojibutton {
+  width: 28px;
 }
 .vue3-discord-emojipicker__emojibutton {
   background-image: url('https://en-zo.dev/vue-discord-emojipicker/sprite_emojis.png');
