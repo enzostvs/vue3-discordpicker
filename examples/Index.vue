@@ -10,10 +10,10 @@
 </template>
 
 <script>
-import EmojiPicker from 'vue3-discordpicker'
+import DiscordPicker from 'vue3-discordpicker'
 
 export default {
-  components: { EmojiPicker },
+  components: { DiscordPicker },
   data () {
     return {
       value: ''

@@ -22,18 +22,18 @@ npm install vue3-discordpicker
 ### Global
 ```js
 import Vue from 'vue'
-import EmojiPicker from 'vue3-discordpicker'
+import DiscordPicker from 'vue3-discordpicker'
 
-Vue.use(EmojiPicker, /* { default options with global component } */)
+Vue.use(DiscordPicker, /* { default options with global component } */)
 ```
 
 ### Local registration
 ```js
-import EmojiPicker from 'vue3-discordpicker'
+import DiscordPicker from 'vue3-discordpicker'
 
 export default {
   components: {
-    EmojiPicker
+    DiscordPicker
   }
 }
 ```
