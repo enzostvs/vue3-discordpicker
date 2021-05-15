@@ -12,7 +12,7 @@ This components is available only in vue3.
 
 ### Exemple
 - [Live demo 🎉](https://en-zo.dev/vue3-discordpicker)
-- [Code demo 🎈](https://github.com/enzostvs/vue3-discordpicker/tree/main/examples)
+- [Code demo 🎈](https://github.com/enzostvs/vue3-discordpicker/blob/master/examples/Index.vue)
 
 ### Install
 ```js
