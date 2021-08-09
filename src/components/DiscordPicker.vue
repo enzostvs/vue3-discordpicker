@@ -8,6 +8,7 @@
       >
         <header class="bg-grey-400 px-5 pt-5 pb-2 shadow-lg relative z-1 flex items-center">
           <p
+            v-if="apiKey"
             :class="{ 'hover:bg-opacity-100 hover:bg-grey-300 bg-grey-300': active === 'gif' }"
             class="font-bold text-white text-sm py-1 hover:bg-grey-300 hover:bg-opacity-40 px-2 rounded-md cursor-pointer w-max hidden md:block mr-3"
             @click="active = 'gif'"
@@ -15,6 +16,7 @@
             GIF
           </p>
           <p
+            v-if="showEmoji"
             :class="{ 'hover:bg-opacity-100 hover:bg-grey-300 bg-grey-300': active === 'emoji' }"
             class="font-bold text-white text-sm py-1 hover:bg-grey-300 hover:bg-opacity-40 px-2 rounded-md cursor-pointer w-max hidden md:block"
             @click="active = 'emoji'"
@@ -22,14 +24,16 @@
             Émoji
           </p>
         </header>
-        <gif-picker v-if="active === 'gif'" :api-key="key" @send="({ url, send, type}) => this.send(url, send, type)" />
-        <emoji-picker v-if="active === 'emoji'" :categories="categories" :emojis="emojis" @send="({ emoji, send }) => this.send(emoji, send)" />
+        <gif-picker v-if="active === 'gif'" :api-key="apiKey" :sources="$data.$sources" @send="({ url, send, type}) => this.send(url, send, type)" />
+        <emoji-picker v-if="active === 'emoji'" :categories="categories" :emojis="emojis" :sources="$data.$sources" @send="({ emoji, send }) => this.send(emoji, send)" />
       </div>
       <div :class="{ 'bg-grey-400 rounded-xl justify-between pr-4 flex items-center emojibutton__active': input }" class="mt-4">
+        <upload-button v-if="showUpload" @click="$emit('upload')" />
         <Autocomplete v-if="input" :value="value" :placeholder="placeholder" :opened-picker="opened" :emojis="emojis.list" @change="e => $emit('update:value', e)" @send="send" @close="close" />
         <div class="flex items-center justify-center">
-          <gif-button @click="open" />
-          <emoji-button @click="open" class="ml-3" />
+          <slot />
+          <gif-button v-if="apiKey" :sources="$data.$sources" @click="open" />
+          <emoji-button v-if="showEmoji" :sources="$data.$sources" class="ml-3" @click="open" />
         </div>
       </div>
     </div>
@@ -45,14 +49,15 @@ import EmojiPicker from '@/components/emojis/EmojiPicker.vue'
 import GifPicker from '@/components/gif/GifPicker.vue'
 import EmojiButton from '@/components/emojis/Button.vue'
 import GifButton from '@/components/gif/Button.vue'
+import UploadButton from '@/components/upload/Button.vue'
 import Autocomplete from '@/components/emojis/Autocomplete.vue'
 
 export default defineComponent({
-  components: { EmojiButton, Autocomplete, GifButton, GifPicker, EmojiPicker },
+  components: { EmojiButton, Autocomplete, GifButton, GifPicker, EmojiPicker, UploadButton },
   directives: {
     clickOutside,
   },
-  emits: ['update:value', 'emoji', 'gif'],
+  emits: ['update:value', 'emoji', 'gif', 'upload'],
   props: {
     categories: {
       type: Array,
@@ -75,15 +80,43 @@ export default defineComponent({
     gifFormat: {
       type: String
     },
-    key: {
+    apiKey: {
       type: String
+    },
+    showUpload: {
+      type: Boolean,
+      default: false
+    },
+    showEmoji: {
+      type: Boolean,
+      default: true
+    },
+    sources: {
+      type: Object
+    },
+    multiple: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
       opened: false,
       emojis,
-      active: 'gif'
+      active: 'gif',
+      $sources: {
+        search: 'https://en-zo.dev/vue-discord-emojipicker/search.svg',
+        gif: 'https://en-zo.dev/vue-discord-emojipicker/gif.svg',
+        category: 'https://en-zo.dev/vue-discord-emojipicker/categories/%REPLACE%.svg',
+        variation: 'https://en-zo.dev/vue-discord-emojipicker/variations/variation_%REPLACE%.svg',
+        emoji: 'https://en-zo.dev/vue-discord-emojipicker/sprite_emojis.png'
+      }
+    }
+  },
+  created () {
+    this.$data.$sources = {
+      ...this.$data.$sources,
+      ...this.sources
     }
   },
   methods: {
@@ -104,7 +137,9 @@ export default defineComponent({
           this.$emit('update:value', `${this.value} ${value}`)
         }
       }
-      this.opened = false
+      if (!this.multiple || type === 'gif') {
+        this.opened = false
+      }
     },
     formatGif (url) {
       if (this.gifFormat === 'md') {
@@ -116,7 +151,11 @@ export default defineComponent({
       return url
     },
     open (item = 'emoji') {
-      this.active = item
+      if (this.active !== item) {
+        this.active = item
+        this.opened = true
+        return
+      }
       this.opened = !this.opened
     }
   }
@@ -171,7 +210,6 @@ export default defineComponent({
   width: 28px;
 }
 .vue3-discord-emojipicker__emojibutton {
-  background-image: url('https://en-zo.dev/vue-discord-emojipicker/sprite_emojis.png');
   background-position: -22px 0;
   background-size: 242px 88px;
   background-repeat: no-repeat;

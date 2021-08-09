@@ -6,11 +6,16 @@
         input
         :value="value"
         gif-format="html"
+        api-key="BEASSSWYZQI2"
+        show-upload
+        multiple
         @update:value="value = $event"
         @emoji="setEmoji"
         @gif="setGif"
-      />
-
+        @upload="setUpload"
+      >
+        <div>Icon</div>
+      </discord-picker>
     </div>
   </div>
 </template>
@@ -35,6 +40,9 @@ export default {
     },
     setGif (gif) {
       this.selectedGif = gif
+    },
+    setUpload () {
+      console.log('open')
     }
   }
 }

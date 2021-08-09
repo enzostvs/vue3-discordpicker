@@ -3,6 +3,12 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   emits: ['click'],
+  props: {
+    sources: {
+      type: Object,
+      required: true
+    }
+  },
   methods: {
     newEmoji ({ target }) {
       const column = (Math.floor(Math.random() * 11)) * -22
@@ -15,5 +21,5 @@ export default defineComponent({
 </script>
 
 <template>
-  <img src="https://en-zo.dev/vue-discord-emojipicker/gif.svg" alt="Gif button" width="10" height="10" class="vue3-discord-emojipicker__gifbutton w-6 transition duration-200 filter hover:brightness-150 cursor-pointer transform hover:scale-110" @click="$emit('click', 'gif')">
+  <img :src="sources.gif" alt="Gif button" width="10" height="10" class="vue3-discord-emojipicker__gifbutton w-6 transition duration-200 filter hover:brightness-150 cursor-pointer transform hover:scale-110" @click="$emit('click', 'gif')">
 </template>

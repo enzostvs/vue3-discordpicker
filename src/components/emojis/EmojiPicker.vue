@@ -1,19 +1,19 @@
 <template>
-  <div style="height: calc(100% - 9px)">
+  <div style="height: calc(100% - 10px)">
     <header class="bg-grey-400 px-5 pt-2 pb-5 shadow-lg relative z-1">
       <div class="flex items-center justify-between w-full">
         <div class="flex items-center justify-between w-full bg-grey-600 rounded-md overflow-hidden pr-4">
           <input v-model="search" class="bg-grey-600 w-full text-sm py-2 px-3 text-white outline-none" :placeholder="selected && selected.name ? `:${selected.name.replace(/\s/g, '')}:`: 'Find the perfect emoji'" />
-          <img src="https://en-zo.dev/vue-discord-emojipicker/search.svg" class="w-4" />
+          <img :src="sources.search" class="w-4" />
         </div>
         <div class="py-2 px-2 ml-2 relative z-1" @mouseenter="hovered = true" @mouseleave="hovered = false">
-          <img :src="`https://en-zo.dev/vue-discord-emojipicker/variations/variation_${variation}.svg`" class="w-6 relative z-1" />
+          <img :src="formatUrlSources(variation, sources.variation)" class="w-6 relative z-1" />
           <div :class="`bg-white border border-grey-600 bg-grey-500 rounded-lg absolute shadow-md -top-1 left-0 w-full -z-1 pt-10 text-center transform ${hovered ? '' : 'pointer-events-none -translate-y-3 opacity-0'} transition duration-300`">
             <template v-for="emj in 5">
               <img
                 v-if="variation !== emj - 1"
                 :key="emj"
-                :src="`https://en-zo.dev/vue-discord-emojipicker/variations/variation_${emj - 1}.svg`"
+                :src="formatUrlSources(emj - 1, sources.variation)"
                 class="w-full px-2 py-2 transition duration-200 hover:bg-grey-400 cursor-pointer vue3-discord-emojipicker__pickvariation"
                 @click="setVariation(emj - 1)"
               />
@@ -27,9 +27,9 @@
         <img
           v-for="(category, c) in categories"
           :key="c"
-          :src="`https://en-zo.dev/vue-discord-emojipicker/categories/${category}.svg`"
+          :src="formatUrlSources(category, sources.category)"
           :class="{ 'bg-grey-300 bg-opacity-50': c === active }"
-          class="px-2 py-2 h-10 w-full transition duration-200 hover:bg-grey-300 hover:bg-opacity-50 rounded-lg cursor-pointer"
+          class="px-2 py-2 h-9 mb-2 w-full transition duration-200 hover:bg-grey-300 hover:bg-opacity-50 rounded-lg cursor-pointer"
           @click="goToCategory(c)"
         />
       </div>
@@ -86,6 +86,10 @@ export default {
       required: true
     },
     emojis: {
+      type: Object,
+      required: true
+    },
+    sources: {
       type: Object,
       required: true
     }
@@ -171,6 +175,9 @@ export default {
       })
       return closest
     },
+    formatUrlSources (slug, url) {
+      return url.replace('%REPLACE%', slug)
+    }
   }
 }
 </script>
